@@ -69,28 +69,19 @@ Project Structure
 
 Women-Safety-Website/
 │
-├── 
-frontend/
-
+├── frontend/
 │   ├── index.html
-
 │   ├── login.html
-
 │   ├── style.css
-
 │   └── script.js
 │
 ├── backend/
-
 │   ├── server.js
-
 │   ├── package.json
-
 │   ├── models/
-
 │   └── routes/
 │
-└── README.me
+└── README.md
 
 --------------------------------
 📦 Install Required Packages
@@ -113,22 +104,34 @@ Simple and responsive design
 🚨 Dashboard Page
 
 SOS emergency button
+
 Fake call option
+
 Police emergency support
+
 Hospital support
+
 Emergency email management
 
 ---------------------------------
 📷 Output / Result
 
 🔐 User Login Screen
+
 🚨 Women Safety Dashboard
+
 🔴 SOS Emergency Alert System
+
 📧 Emergency Email Sending
+
 📍 Live Location Sharing
+
 📞 Fake Call Feature
+
 🚓 Police Emergency Support
+
 🏥 Hospital Emergency Support
+
 💻 Interactive and Responsive User Interface
 
 -------------------------------------------------
