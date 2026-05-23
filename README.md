@@ -101,13 +101,17 @@ npm install express mongoose cors
 
 ---------------------------------
 📷 Website Pages
+
 🔐 Login Page
 
 User authentication system
+
 Secure login interface
+
 Simple and responsive design
 
 🚨 Dashboard Page
+
 SOS emergency button
 Fake call option
 Police emergency support
@@ -129,7 +133,9 @@ Emergency email management
 
 -------------------------------------------------
 👩‍💻 Author
+
 Jaya Bhunte
+
 Women Safety Project 
 
 ------------------------------------------------
