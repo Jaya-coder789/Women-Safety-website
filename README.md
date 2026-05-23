@@ -26,7 +26,19 @@ Frontend
 
 🎨CSS
 
-⚡JavaScript 
+⚡JavaScript
+
+Backend
+
+🟢 Node.js
+
+🚀 Express.js
+
+Database
+
+🍃 MongoDB
+
+📦 Mongoose
 
 ------
 🚀 Features
