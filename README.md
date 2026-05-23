@@ -21,8 +21,15 @@ Create awareness about women safety using technology
 ⚙️ Technologies Used/
 
 Frontend
+
+---
+
 🌐HTML
-🎨CSS 
+
+---
+🎨CSS
+
+----
 ⚡JavaScript 
 
 ------
