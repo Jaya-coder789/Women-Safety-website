@@ -18,19 +18,13 @@ Help users contact police and hospitals quickly
 Create awareness about women safety using technology
 
 ------------------------
-⚙️ Technologies Used\
-
+⚙️ Technologies Used/
 Frontend
-🌐 HTML
-🎨 CSS
-⚡ JavaScript
-Backend
-🟢 Node.js
-🚀 Express.js
-Database
-🍃 MongoDB
-📦 Mongoose
------------------------
+🌐HTML
+🎨CSS 
+⚡JavaScript 
+
+------
 🚀 Features
 
 🔴 SOS Emergency Button
@@ -42,6 +36,7 @@ Database
 🔐 User Login System
 🚪 Logout Feature
 💻 Responsive User Interface
+
 ---------------------------------
 📊 Methodology
 
@@ -74,6 +69,7 @@ Women-Safety-Website/
 │   └── routes/
 │
 └── README.me
+
 --------------------------------
 📦 Install Required Packages
 
@@ -92,6 +88,7 @@ Fake call option
 Police emergency support
 Hospital support
 Emergency email management
+
 ---------------------------------
 📷 Output / Result
 
@@ -104,10 +101,12 @@ Emergency email management
 🚓 Police Emergency Support
 🏥 Hospital Emergency Support
 💻 Interactive and Responsive User Interface
+
 -------------------------------------------------
 👩‍💻 Author
 Jaya Bhunte
 Women Safety Project 
+
 ------------------------------------------------
 📌 Conclusion
 
