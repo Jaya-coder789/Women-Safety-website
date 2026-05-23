@@ -22,14 +22,10 @@ Create awareness about women safety using technology
 
 Frontend
 
----
-
 🌐HTML
 
----
 🎨CSS
 
-----
 ⚡JavaScript 
 
 ------
