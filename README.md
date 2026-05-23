@@ -126,25 +126,37 @@ Hospital support
 Emergency email management
 
 ---------------------------------
-📷 Output / Result
+🌐 Working of the Website
 
-🔐 User Login Screen
+User opens the Women Safety Website
 
-🚨 Women Safety Dashboard
+User logs into the system
 
-🔴 SOS Emergency Alert System
+Dashboard with emergency features appears
 
-📧 Emergency Email Sending
+User presses the 🔴 SOS button during danger situations
 
-📍 Live Location Sharing
+Website sends the message “Help! I am in danger”
 
-📞 Fake Call Feature
+User’s 📍 live location is attached with the emergency message
 
-🚓 Police Emergency Support
+Emergency alert is sent to saved emergency contacts
 
-🏥 Hospital Emergency Support
+Emergency alert is also sent to nearby police support
 
-💻 Interactive and Responsive User Interface
+Fake call feature generates a fake incoming call for safety
+
+Hospital and police buttons provide instant emergency access
+
+MongoDB stores user details and emergency contact information
+
+Express.js handles backend server communication
+
+Mongoose connects the website with MongoDB database
+
+CORS enables frontend and backend connection
+
+Website provides fast, secure, and real-time emergency support system
 
 -------------------------------------------------
 👩‍💻 Author
