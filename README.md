@@ -32,13 +32,21 @@ Frontend
 🚀 Features
 
 🔴 SOS Emergency Button
+
 📍 Live Location Sharing
+
 📧 Emergency Email Alert
+
 📞 Fake Call Feature
+
 🚓 Police Emergency Button
+
 🏥 Hospital Emergency Button
+
 🔐 User Login System
+
 🚪 Logout Feature
+
 💻 Responsive User Interface
 
 ---------------------------------
@@ -62,15 +70,23 @@ Project Structure
 Women-Safety-Website/
 │
 ├── frontend/
+
 │   ├── index.html
+
 │   ├── login.html
+
 │   ├── style.css
+
 │   └── script.js
 │
 ├── backend/
+
 │   ├── server.js
+
 │   ├── package.json
+
 │   ├── models/
+
 │   └── routes/
 │
 └── README.me
@@ -79,14 +95,17 @@ Women-Safety-Website/
 📦 Install Required Packages
 
 Run this command inside backend folder:
+
 npm install express mongoose cors
 
 ---------------------------------
 📷 Website Pages
 🔐 Login Page
+
 User authentication system
 Secure login interface
 Simple and responsive design
+
 🚨 Dashboard Page
 SOS emergency button
 Fake call option
