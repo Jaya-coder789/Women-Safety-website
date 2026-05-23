@@ -69,7 +69,8 @@ Project Structure
 
 Women-Safety-Website/
 │
-├── frontend/
+├── 
+frontend/
 
 │   ├── index.html
 
