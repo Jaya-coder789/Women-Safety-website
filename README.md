@@ -19,6 +19,7 @@ Create awareness about women safety using technology
 
 ------------------------
 ⚙️ Technologies Used/
+
 Frontend
 🌐HTML
 🎨CSS 
@@ -51,6 +52,7 @@ Frontend
 5️⃣ User can access police or hospital support instantly
 
 6️⃣ Fake call feature helps users escape unsafe situations
+
 ----------------------------------
 Project Structure
 
@@ -74,8 +76,8 @@ Women-Safety-Website/
 📦 Install Required Packages
 
 Run this command inside backend folder:
-
 npm install express mongoose cors
+
 ---------------------------------
 📷 Website Pages
 🔐 Login Page
