@@ -129,9 +129,9 @@ Emergency email management
 ---------------------------------
 🌐 Working of the Website
 
-.User opens the Women Safety Website
+User opens the Women Safety Website
 
-.User logs into the system
+User logs into the system
 
 Dashboard with emergency features appears
 
