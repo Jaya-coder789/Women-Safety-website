@@ -101,6 +101,7 @@ Women-Safety-Website/
 Run this command inside backend folder:
 
 npm install express mongoose cors
+node server.js
 
 ---------------------------------
 📷 Website Pages
