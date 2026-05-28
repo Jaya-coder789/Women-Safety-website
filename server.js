@@ -7,37 +7,24 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
 
-let users = [];
-let emails = [];
 
-// LOGIN
-app.post("/login", (req,res)=>{
-    const {username,password} = req.body;
+// LOGIN API
+app.post("/login", (req, res) => {
 
-    let user = users.find(u=>u.username===username);
+    const { username, password } = req.body;
 
-    if(!user){
-        users.push({username,password});
-        console.log("User Saved:", username);
-    }
+    console.log("User Login:", username);
 
-    res.json({success:true});
+    res.json({
+        success: true
+    });
+
 });
 
-// SAVE EMAIL
-app.post("/save-email",(req,res)=>{
-    const {email} = req.body;
 
-    emails.push(email);
-    console.log("Email Saved:", email);
+// START SERVER
+app.listen(3000, () => {
 
-    res.send("Email Saved ✅");
+    console.log("🚀 Server running on http://localhost:3000");
+
 });
-
-// SOS
-app.post("/sos",(req,res)=>{
-    console.log("🚨 SOS:", req.body.message);
-    res.send("SOS Sent");
-});
-
-app.listen(3000, ()=>console.log("Server running on http://localhost:3000"));
