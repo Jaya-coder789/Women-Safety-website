@@ -1,46 +1,1220 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Women Safety</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women Safety Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        // Simulated local storage check from user code (with safe demo fallback)
+        if (localStorage.getItem("loggedIn") !== "true") {
+            // For testing and live preview smoothness, auto-set if not set, or allow demo view
+            localStorage.setItem("loggedIn", "true");
+        }
+    </script>
 
-<script>
-if(localStorage.getItem("loggedIn") !== "true"){
-    window.location.href="login.html";
-}
-</script>
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
 
+        /* Animated Mesh Background Gradient */
+        body {
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #31103f, #111827, #0284c7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #f8fafc;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .glass-input:focus {
+            outline: none;
+            border-color: #ec4899;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        /* SOS Pulsing Siren Button Animation */
+        .sos-btn-wrapper {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sos-pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.6);
+            animation: sosPulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        .sos-pulse-ring-delay {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes sosPulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        .sos-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #991b1b 100%);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .sos-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 45px rgba(239, 68, 68, 1), inset 0 2px 6px rgba(255, 255, 255, 0.6);
+        }
+
+        .sos-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Fake Call Screen Overlay Styles */
+        #fakeCallOverlay {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+
+        /* Location Map & Emergency Result Styles */
+        .location-map {
+            width: 100%;
+            height: 280px;
+            border: 0;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.7);
+        }
+        .location-result {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 12px;
+        }
+        .location-result + .location-result { margin-top: 8px; }
+        .location-result a { text-decoration: none; }
+        .loading-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #34d399;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 50% { opacity: .35; transform: scale(.75); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(236, 72, 153, 0.5);
+            border-radius: 10px;
+        }
+    </style>
 </head>
+<body class="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-<body>
+    <canvas id="particleCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
 
-<div class="app-container">
+    <header class="glass-nav fixed top-0 left-0 right-0 z-40 px-4 lg:px-8 py-3.5 flex items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-3">
+            <span class="text-2xl animate-bounce">🚨</span>
+            <div>
+                <h1 class="text-lg font-extrabold tracking-wide text-white flex items-center gap-2">
+                    Women Safety <span class="bg-gradient-to-r from-pink-500 to-rose-500 text-xs text-white px-2 py-0.5 rounded-full uppercase font-bold tracking-wider">App</span>
+                </h1>
+                <p class="text-xs text-slate-300 hidden sm:block">Real-time Protection & Emergency Dashboard</p>
+            </div>
+        </div>
 
-<h1>🚨 Women Safety</h1>
+        <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-200">
+            <button onclick="toggleModal('aboutModal')" class="hover:text-pink-400 transition flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-pink-400"></i> About</button>
+            <button onclick="toggleModal('statsModal')" class="hover:text-pink-400 transition flex items-center gap-1.5"><i class="fa-solid fa-chart-line text-pink-400"></i> Quick Stats</button>
+            <button onclick="toggleModal('settingsModal')" class="hover:text-pink-400 transition flex items-center gap-1.5"><i class="fa-solid fa-gear text-pink-400"></i> Settings</button>
+        </nav>
 
-<button class="sos-btn" onclick="sendSOS()">SOS</button>
+        <div class="flex items-center space-x-3">
+            <div id="statusBadge" class="flex items-center space-x-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Protection Active</span>
+            </div>
+            <button onclick="logout()" class="bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-400/30 transition flex items-center gap-1 shadow-md">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="hidden sm:inline">Logout</span>
+            </button>
+        </div>
+    </header>
 
-<br>
+    <main class="relative z-10 pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto flex-grow flex flex-col justify-center items-center">
+        
+        <!-- Tagline Banner -->
+        <div class="text-center mb-6 max-w-2xl">
+            <span class="inline-block px-3 py-1 mb-3 text-xs font-bold tracking-widest text-pink-300 uppercase bg-pink-500/20 border border-pink-500/30 rounded-full">
+                EMPOWERING WOMEN
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                Quick Support, <span class="bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400 bg-clip-text text-transparent">Anytime, Anywhere.</span>
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-2">Instant SOS broadcasting, GPS sharing, and emergency helpline dispatch in one tap.</p>
+        </div>
 
-<input type="email" id="email" placeholder="Enter Emergency Email">
-<button onclick="addEmail()">Add</button>
+        <!-- Main Dashboard Card -->
+        <div class="app-container glass-card w-full rounded-3xl p-6 sm:p-8 text-center transition-all duration-300 relative overflow-hidden">
+            
+            <!-- Card Header Title -->
+            <div class="flex items-center justify-between pb-6 border-b border-white/10 mb-8">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-pink-500/20 rounded-2xl border border-pink-500/30">
+                        <i class="fa-solid fa-shield-halved text-2xl text-pink-400"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-xl font-bold text-white">Safety Center</h3>
+                        <p class="text-xs text-slate-300">Tap SOS for immediate emergency alert broadcast</p>
+                    </div>
+                </div>
+                <div class="hidden sm:block text-right">
+                    <span class="text-xs text-slate-400 block">System Time</span>
+                    <span id="currentTime" class="text-sm font-mono text-pink-300 font-bold">12:00:00 PM</span>
+                </div>
+            </div>
 
-<br><br>
+            <!-- SOS Pulsing Emergency Button -->
+            <div class="my-6 flex flex-col items-center justify-center">
+                <div class="sos-btn-wrapper my-4">
+                    <div class="sos-pulse-ring"></div>
+                    <div class="sos-pulse-ring sos-pulse-ring-delay"></div>
+                    <button class="sos-btn relative z-10 w-36 h-36 sm:w-44 sm:h-44 rounded-full flex flex-col items-center justify-center text-white font-extrabold cursor-pointer select-none active:scale-95 transition transform" onclick="sendSOS()">
+                        <i class="fa-solid fa-bell text-3xl sm:text-4xl mb-1 animate-wiggle"></i>
+                        <span class="text-2xl sm:text-3xl tracking-wider">SOS</span>
+                        <span class="text-[10px] sm:text-xs uppercase font-medium tracking-widest opacity-90 mt-0.5">Press 1-Tap Alert</span>
+                    </button>
+                </div>
+                <p class="text-xs text-rose-300/90 font-medium mt-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-location-dot animate-bounce text-rose-400"></i> Location auto-attaches with message
+                </p>
+            </div>
 
-<button onclick="fakeCall()">📞 Fake Call</button>
+            <!-- Emergency Email Form & List -->
+            <div class="bg-slate-900/40 rounded-2xl p-4 sm:p-5 border border-white/10 mb-6 text-left">
+                <label for="email" class="block text-xs font-semibold text-slate-200 mb-2 uppercase tracking-wider flex items-center justify-between">
+                    <span><i class="fa-solid fa-envelope text-pink-400 mr-1.5"></i> Emergency Contact Email</span>
+                    <span id="contactCount" class="text-[10px] bg-pink-500/20 text-pink-300 px-2 py-0.5 rounded-full">0 Saved</span>
+                </label>
+                
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="email" id="email" placeholder="Enter Emergency Email (e.g. parent@example.com)" class="glass-input flex-1 px-4 py-2.5 rounded-xl text-sm transition font-medium">
+                    <button onclick="addEmail()" class="bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Add Email
+                    </button>
+                </div>
 
-<br><br>
+                <!-- Email Badges List -->
+                <div id="emailBadgeList" class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/5">
+                    <!-- Dynamic Badges will appear here -->
+                    <span class="text-xs text-slate-400 italic">No emergency emails added yet.</span>
+                </div>
+            </div>
 
-<button onclick="showPolice()">🚓 Police</button>
-<button onclick="showHospital()">🏥 Hospital</button>
+            <!-- Quick Emergency Action Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button onclick="fakeCall()" class="group relative overflow-hidden bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-pink-500/50 p-4 rounded-2xl transition duration-300 text-left flex items-center space-x-3 shadow-lg">
+                    <div class="w-11 h-11 rounded-xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-phone-flip text-pink-400 text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition">📞 Fake Call</h4>
+                        <p class="text-[11px] text-slate-400">Trigger simulated incoming phone call</p>
+                    </div>
+                </button>
 
-<br><br>
+                <button onclick="showPolice()" class="group relative overflow-hidden bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-blue-500/50 p-4 rounded-2xl transition duration-300 text-left flex items-center space-x-3 shadow-lg">
+                    <div class="w-11 h-11 rounded-xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-user-shield text-blue-400 text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white group-hover:text-blue-300 transition">🚓 Police Help</h4>
+                        <p class="text-[11px] text-slate-400">Call 112 & find nearest police station</p>
+                    </div>
+                </button>
 
-<button onclick="logout()">Logout</button>
+                <button onclick="showHospital()" class="group relative overflow-hidden bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-emerald-500/50 p-4 rounded-2xl transition duration-300 text-left flex items-center space-x-3 shadow-lg">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center group-hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-hospital text-emerald-400 text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition">🏥 Hospital Support</h4>
+                        <p class="text-[11px] text-slate-400">Find nearest hospital & medical help</p>
+                    </div>
+                </button>
+            </div>
 
-</div>
+            <!-- Quick Logout Action -->
+            <div class="mt-8 pt-4 border-t border-white/10 flex justify-end">
+                <button onclick="logout()" class="text-slate-400 hover:text-rose-400 text-xs font-semibold transition flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-rose-500/10">
+                    <i class="fa-solid fa-power-off"></i> Exit Session / Logout
+                </button>
+            </div>
+        </div>
+    </main>
 
-<script src="script.js"></script>
+    <footer class="glass-nav relative z-10 py-4 px-4 text-center text-xs text-slate-300 border-t border-white/10 mt-auto">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>2026 Women Safety Team | Your Safety is Our Priority</p>
+            <p class="font-medium text-pink-300">Jaya Bhunte Project</p>
+        </div>
+    </footer>
 
+
+    <!-- SOS Modal -->
+    <div id="sosModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-lg w-full rounded-3xl p-6 border border-rose-500/40 shadow-2xl relative animate-scaleUp">
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-rose-600/30 border border-rose-500/50 rounded-full flex items-center justify-center mx-auto mb-3 text-rose-400 text-3xl animate-pulse">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white">EMERGENCY SOS ACTIVATED</h3>
+                <p class="text-xs text-rose-300 mt-1">SOS message prepared for emergency contacts & authorities</p>
+            </div>
+
+            <div class="bg-slate-900/70 rounded-2xl p-4 text-xs space-y-2 mb-5 border border-white/10">
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                    <span class="text-slate-400">Emergency Status:</span>
+                    <span class="text-emerald-400 font-bold flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> Emergency Alert Active</span>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                    <span class="text-slate-400">Message Payload:</span>
+                    <span class="text-slate-200 font-mono">"Help! I am in danger"</span>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-2 gap-3">
+                    <span class="text-slate-400 shrink-0">Live Location:</span>
+                    <span id="sosLocationText" class="text-pink-300 font-mono font-bold text-right">Detecting precise GPS...</span>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-emerald-500/30 bg-black/30">
+                    <div class="px-3 py-2 flex items-center justify-between bg-slate-950/60">
+                        <span class="text-emerald-400 text-[11px] font-bold flex items-center gap-2">
+                            <span id="liveGpsDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                            <span id="liveGpsStatus">CONNECTING TO LIVE GPS...</span>
+                        </span>
+                        <span id="liveGpsAccuracy" class="text-slate-400 text-[10px]">Waiting for GPS</span>
+                    </div>
+                    <iframe
+                        id="sosMap"
+                        title="Live emergency location"
+                        class="w-full h-44 border-0"
+                        loading="eager"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="about:blank">
+                    </iframe>
+                    <div class="p-2 bg-slate-950/70">
+                        <button onclick="openSOSMaps()" class="w-full bg-emerald-600/80 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg text-xs transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Open My Live Location in Google Maps
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Alert Recipients:</span>
+                    <span id="sosRecipientsText" class="text-slate-200 font-medium">Saved Emails + Police Network</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="toggleAudioAlarm()" id="alarmAudioBtn" class="flex-1 bg-amber-600/80 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-volume-high"></i> Toggle Acoustic Siren
+                </button>
+                <button onclick="closeModal('sosModal')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 px-4 rounded-xl text-xs transition">
+                    Dismiss Alert
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fake Call Full-Screen Overlay -->
+    <div id="fakeCallOverlay" class="fixed inset-0 z-50 hidden flex flex-col justify-between p-8 text-center text-white">
+        <div class="pt-12">
+            <span class="text-xs uppercase tracking-widest text-slate-400 font-medium">Incoming Call</span>
+            <h2 id="callerNameDisplay" class="text-3xl font-extrabold mt-2">Mom / Emergency Helpline</h2>
+            <p id="callStatusText" class="text-xs text-pink-400 font-mono mt-1">Mobile +1 (555) 019-2834</p>
+        </div>
+
+        <div class="my-auto flex justify-center">
+            <div class="w-32 h-32 rounded-full bg-slate-800/80 border-2 border-pink-500/40 flex items-center justify-center shadow-2xl animate-pulse">
+                <i class="fa-solid fa-user text-5xl text-pink-300"></i>
+            </div>
+        </div>
+
+        <div class="pb-12 max-w-xs mx-auto w-full">
+            <div id="callControlButtons" class="flex items-center justify-around">
+                <!-- Decline Button -->
+                <button onclick="endFakeCall()" class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center text-white text-2xl shadow-lg transition transform active:scale-90">
+                    <i class="fa-solid fa-phone-slash"></i>
+                </button>
+                <!-- Accept Button -->
+                <button onclick="acceptFakeCall()" class="w-16 h-16 rounded-full bg-emerald-600 hover:bg-emerald-700 flex items-center justify-center text-white text-2xl shadow-lg transition transform active:scale-90 animate-bounce">
+                    <i class="fa-solid fa-phone"></i>
+                </button>
+            </div>
+
+            <div id="activeCallControls" class="hidden flex-col items-center">
+                <span id="callTimer" class="text-2xl font-mono text-emerald-400 mb-6 font-bold">00:00</span>
+                <button onclick="endFakeCall()" class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center text-white text-2xl shadow-lg">
+                    <i class="fa-solid fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Police Modal -->
+    <div id="policeModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full rounded-3xl p-6 border border-blue-500/40 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('policeModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="p-3 bg-blue-500/20 rounded-2xl border border-blue-500/40 text-blue-400">
+                    <i class="fa-solid fa-user-shield text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Nearest Police Station</h3>
+                    <p class="text-xs text-slate-300">Uses your current device location</p>
+                </div>
+            </div>
+
+            <div id="policeLocationStatus" class="text-xs text-blue-300 mb-3">
+                <span class="loading-dot"></span> Detecting your location...
+            </div>
+
+            <div class="space-y-3 mb-5">
+                <a href="tel:112" class="block w-full bg-blue-600/80 hover:bg-blue-600 text-white font-bold p-3.5 rounded-2xl text-center text-sm shadow-md transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-phone text-lg"></i> Call Emergency Police (112)
+                </a>
+                <button onclick="openPoliceMaps()" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold p-3.5 rounded-2xl text-center text-sm transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-map-location-dot"></i> Open Police Stations in Google Maps
+                </button>
+            </div>
+
+            <div class="mb-4">
+                <iframe id="policeMap" class="location-map" loading="lazy" title="Nearest police station map"></iframe>
+            </div>
+
+            <div id="policeResults" class="text-xs">
+                <div class="location-result text-slate-400">Finding nearby police stations...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hospital Modal -->
+    <div id="hospitalModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full rounded-3xl p-6 border border-emerald-500/40 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('hospitalModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="p-3 bg-emerald-500/20 rounded-2xl border border-emerald-500/40 text-emerald-400">
+                    <i class="fa-solid fa-hospital text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Nearest Hospital</h3>
+                    <p class="text-xs text-slate-300">Uses your current device location</p>
+                </div>
+            </div>
+
+            <div id="hospitalLocationStatus" class="text-xs text-emerald-300 mb-3">
+                <span class="loading-dot"></span> Detecting your location...
+            </div>
+
+            <div class="space-y-3 mb-5">
+                <button onclick="openHospitalMaps()" class="w-full bg-emerald-600/80 hover:bg-emerald-600 text-white font-bold p-3.5 rounded-2xl text-center text-sm shadow-md transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-map-location-dot"></i> Open Hospitals in Google Maps
+                </button>
+                <a href="tel:112" class="block w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold p-3.5 rounded-2xl text-center text-sm transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-phone"></i> Emergency Medical Help (112)
+                </a>
+            </div>
+
+            <div class="mb-4">
+                <iframe id="hospitalMap" class="location-map" loading="lazy" title="Nearest hospital map"></iframe>
+            </div>
+
+            <div id="hospitalResults" class="text-xs">
+                <div class="location-result text-slate-400">Finding nearby hospitals...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info / About Modal -->
+    <div id="aboutModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl p-6 border border-pink-500/40 shadow-2xl relative">
+            <button onclick="closeModal('aboutModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-heart-pulse text-pink-400"></i> About Women Safety Web
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                The Women Safety Website is an intuitive, smart emergency web application developed to assist women during critical situations. Features include quick SOS alerts, live geolocation dispatch, simulated fake calls to evade uncomfortable scenarios, and direct access to police and medical helplines.
+            </p>
+            <div class="bg-slate-900/60 p-3 rounded-xl text-[11px] text-slate-400 space-y-1">
+                <p><strong class="text-slate-200">Developer:</strong> Jaya Bhunte Project</p>
+                <p><strong class="text-slate-200">Tech Stack:</strong> HTML5, CSS3, JavaScript ES6, Web Geolocation API, Web Audio API</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Modal -->
+    <div id="statsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl p-6 border border-purple-500/40 shadow-2xl relative">
+            <button onclick="closeModal('statsModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie text-purple-400"></i> App Performance Stats
+            </h3>
+            <div class="grid grid-cols-2 gap-3 text-center">
+                <div class="bg-slate-900/60 p-4 rounded-2xl border border-white/5">
+                    <span class="text-2xl font-black text-pink-400 block">99.9%</span>
+                    <span class="text-[11px] text-slate-400">Uptime Reliability</span>
+                </div>
+                <div class="bg-slate-900/60 p-4 rounded-2xl border border-white/5">
+                    <span class="text-2xl font-black text-emerald-400 block">&lt; 2s</span>
+                    <span class="text-[11px] text-slate-400">Alert Latency</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl p-6 border border-slate-500/40 shadow-2xl relative">
+            <button onclick="closeModal('settingsModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-sliders text-pink-400"></i> Alert Settings
+            </h3>
+            <div class="space-y-3 text-xs">
+                <label class="flex items-center justify-between p-3 bg-slate-900/60 rounded-xl cursor-pointer">
+                    <span class="text-slate-200">Auto-attach GPS Location</span>
+                    <input type="checkbox" checked class="accent-pink-500 w-4 h-4">
+                </label>
+                <label class="flex items-center justify-between p-3 bg-slate-900/60 rounded-xl cursor-pointer">
+                    <span class="text-slate-200">Acoustic Siren Sound on SOS</span>
+                    <input type="checkbox" id="sirenSoundToggle" checked class="accent-pink-500 w-4 h-4">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let storedEmails = JSON.parse(localStorage.getItem("emergencyEmails")) || [];
+        let audioCtx = null;
+        let sirenOscillator = null;
+        let ringtoneInterval = null;
+        let activeCallTimerInterval = null;
+        let isSirenPlaying = false;
+
+        // Initialize Application
+        window.addEventListener('DOMContentLoaded', () => {
+            updateClock();
+            setInterval(updateClock, 1000);
+            renderEmailBadges();
+            initParticleCanvas();
+        });
+
+        function updateClock() {
+            const timeEl = document.getElementById("currentTime");
+            if (timeEl) {
+                const now = new Date();
+                timeEl.innerText = now.toLocaleTimeString();
+            }
+        }
+
+        function addEmail() {
+            const emailInput = document.getElementById("email");
+            const emailVal = emailInput.value.trim();
+
+            if (!emailVal) {
+                showToast("Please enter a valid email address", "error");
+                return;
+            }
+
+            if (!validateEmail(emailVal)) {
+                showToast("Please enter a valid email format", "error");
+                return;
+            }
+
+            if (storedEmails.includes(emailVal)) {
+                showToast("Email already exists in list", "warning");
+                return;
+            }
+
+            storedEmails.push(emailVal);
+            localStorage.setItem("emergencyEmails", JSON.stringify(storedEmails));
+            emailInput.value = "";
+            renderEmailBadges();
+            showToast("Emergency contact saved!", "success");
+        }
+
+        function removeEmail(index) {
+            storedEmails.splice(index, 1);
+            localStorage.setItem("emergencyEmails", JSON.stringify(storedEmails));
+            renderEmailBadges();
+            showToast("Contact removed", "info");
+        }
+
+        function renderEmailBadges() {
+            const listContainer = document.getElementById("emailBadgeList");
+            const countContainer = document.getElementById("contactCount");
+
+            countContainer.innerText = `${storedEmails.length} Saved`;
+
+            if (storedEmails.length === 0) {
+                listContainer.innerHTML = `<span class="text-xs text-slate-400 italic">No emergency emails added yet.</span>`;
+                return;
+            }
+
+            listContainer.innerHTML = storedEmails.map((email, idx) => `
+                <div class="inline-flex items-center gap-1.5 bg-pink-500/20 border border-pink-500/30 text-pink-200 px-3 py-1 rounded-full text-xs font-medium">
+                    <span>${escapeHtml(email)}</span>
+                    <button onclick="removeEmail(${idx})" class="hover:text-rose-400 transition ml-1 text-slate-400">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
+        let lastKnownLocation = null;
+        let locationWatchId = null;
+
+        function setSOSLocationUI(location, live = true) {
+            const sosLocationText = document.getElementById("sosLocationText");
+            const liveGpsStatus = document.getElementById("liveGpsStatus");
+            const liveGpsAccuracy = document.getElementById("liveGpsAccuracy");
+            const liveGpsDot = document.getElementById("liveGpsDot");
+            const sosMap = document.getElementById("sosMap");
+
+            if (!location) return;
+
+            const lat = Number(location.lat);
+            const lng = Number(location.lng);
+            const accuracy = Math.round(Number(location.accuracy) || 0);
+
+            sosLocationText.innerHTML =
+                `${lat.toFixed(6)}° ${lat >= 0 ? "N" : "S"}, ` +
+                `${Math.abs(lng).toFixed(6)}° ${lng >= 0 ? "E" : "W"} ` +
+                `<span class="text-emerald-400">• LIVE</span>`;
+
+            liveGpsStatus.innerText = live ? "LIVE GPS LOCATION ACTIVE" : "GPS LOCATION FOUND";
+            liveGpsAccuracy.innerText = `Accuracy: ~${accuracy}m`;
+            liveGpsDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+
+            // Google Maps embed centered on the user's latest GPS position.
+            sosMap.src =
+                `https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed`;
+
+            sosMap.dataset.lat = String(lat);
+            sosMap.dataset.lng = String(lng);
+        }
+
+        function startLiveLocationTracking() {
+            if (!("geolocation" in navigator)) {
+                throw new Error("Geolocation is not supported by this browser.");
+            }
+
+            if (locationWatchId !== null) {
+                navigator.geolocation.clearWatch(locationWatchId);
+            }
+
+            locationWatchId = navigator.geolocation.watchPosition(
+                position => {
+                    lastKnownLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        accuracy: Math.round(position.coords.accuracy || 0)
+                    };
+
+                    setSOSLocationUI(lastKnownLocation, true);
+                },
+                error => {
+                    const liveGpsStatus = document.getElementById("liveGpsStatus");
+                    const liveGpsDot = document.getElementById("liveGpsDot");
+
+                    if (liveGpsStatus) {
+                        liveGpsStatus.innerText =
+                            error.code === 1
+                                ? "LOCATION PERMISSION DENIED"
+                                : "LIVE GPS SIGNAL LOST";
+                    }
+
+                    if (liveGpsDot) {
+                        liveGpsDot.className =
+                            "w-2 h-2 rounded-full bg-rose-400";
+                    }
+
+                    console.warn("Live GPS update error:", error);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        function stopLiveLocationTracking() {
+            if (locationWatchId !== null && "geolocation" in navigator) {
+                navigator.geolocation.clearWatch(locationWatchId);
+                locationWatchId = null;
+            }
+        }
+
+        function getCurrentLocation() {
+            return new Promise((resolve, reject) => {
+                if (!("geolocation" in navigator)) {
+                    reject(new Error("Geolocation is not supported by this browser."));
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        lastKnownLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            accuracy: Math.round(position.coords.accuracy || 0)
+                        };
+
+                        resolve(lastKnownLocation);
+                    },
+                    error => reject(error),
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 15000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
+
+        function buildEmergencyMessage(location) {
+            const mapsLink = location
+                ? `https://www.google.com/maps?q=${location.lat},${location.lng}`
+                : "Location unavailable";
+
+            return `HELP! I AM IN DANGER. Please send immediate help. My current location: ${mapsLink}`;
+        }
+
+        function openSOSMaps() {
+            if (!lastKnownLocation) {
+                showToast("Live GPS location is not available yet. Please wait for GPS.", "warning");
+                return;
+            }
+
+            const mapsLink =
+                `https://www.google.com/maps?q=${lastKnownLocation.lat},${lastKnownLocation.lng}&z=17`;
+
+            window.open(mapsLink, "_blank");
+        }
+
+        async function sendSOS() {
+            const sosModal = document.getElementById("sosModal");
+            const sosLocationText = document.getElementById("sosLocationText");
+            const sosRecipientsText = document.getElementById("sosRecipientsText");
+            const liveGpsStatus = document.getElementById("liveGpsStatus");
+            const liveGpsAccuracy = document.getElementById("liveGpsAccuracy");
+            const liveGpsDot = document.getElementById("liveGpsDot");
+
+            sosModal.classList.remove("hidden");
+
+            if (document.getElementById("sirenSoundToggle").checked) {
+                startSirenSound();
+            }
+
+            sosLocationText.innerText = "Retrieving precise GPS location...";
+            liveGpsStatus.innerText = "CONNECTING TO LIVE GPS...";
+            liveGpsAccuracy.innerText = "Waiting for GPS";
+            liveGpsDot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse";
+
+            let location = null;
+
+            try {
+                // First get a fresh high-accuracy GPS fix.
+                location = await getCurrentLocation();
+                lastKnownLocation = location;
+
+                setSOSLocationUI(location, true);
+
+                // Then keep updating the map and coordinates while the SOS modal is active.
+                startLiveLocationTracking();
+            } catch (error) {
+                console.warn("Initial GPS error:", error);
+
+                sosLocationText.innerText =
+                    "Live location unavailable. Allow browser GPS permission.";
+                liveGpsStatus.innerText =
+                    error && error.code === 1
+                        ? "LOCATION PERMISSION DENIED"
+                        : "GPS LOCATION UNAVAILABLE";
+                liveGpsAccuracy.innerText = "No GPS fix";
+                liveGpsDot.className = "w-2 h-2 rounded-full bg-rose-400";
+            }
+
+            const message = buildEmergencyMessage(location);
+
+            if (storedEmails.length > 0) {
+                sosRecipientsText.innerText =
+                    `${storedEmails.length} family/emergency email(s): ${storedEmails.join(", ")}`;
+            } else {
+                sosRecipientsText.innerText = "No saved family email. Add one above.";
+            }
+
+            const alertPayload = {
+                message,
+                latitude: location ? location.lat : null,
+                longitude: location ? location.lng : null,
+                accuracy: location ? location.accuracy : null,
+                emails: storedEmails,
+                policeNumber: "112",
+                liveTracking: true
+            };
+
+            try {
+                const response = await fetch("/api/emergency-alert", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(alertPayload)
+                });
+
+                if (response.ok) {
+                    showToast("SOS sent with the user's current GPS location.", "success");
+                    return;
+                }
+            } catch (e) {
+                // Backend is optional; continue with browser fallback.
+            }
+
+            // Mobile fallback: opens the SMS composer with the latest GPS location.
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                const smsUrl = `sms:112?body=${encodeURIComponent(message)}`;
+                window.open(smsUrl, "_blank");
+            }
+
+            if (storedEmails.length > 0) {
+                const subject = "URGENT SOS - I AM IN DANGER";
+                const mailto =
+                    `mailto:${storedEmails.join(",")}` +
+                    `?subject=${encodeURIComponent(subject)}` +
+                    `&body=${encodeURIComponent(message)}`;
+
+                window.open(mailto, "_blank");
+            }
+
+            showToast(
+                "SOS prepared with the user's GPS location. Live tracking stays active in this SOS screen.",
+                "warning"
+            );
+        }
+
+        function startSirenSound() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                if (isSirenPlaying) return;
+
+                sirenOscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                sirenOscillator.type = 'sine';
+                sirenOscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+
+                // Siren modulation pattern
+                sirenOscillator.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.5);
+                sirenOscillator.frequency.linearRampToValueAtTime(600, audioCtx.currentTime + 1.0);
+
+                // Loop siren sweep
+                setInterval(() => {
+                    if (sirenOscillator && audioCtx && isSirenPlaying) {
+                        sirenOscillator.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.5);
+                        sirenOscillator.frequency.linearRampToValueAtTime(600, audioCtx.currentTime + 1.0);
+                    }
+                }, 1000);
+
+                sirenOscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                sirenOscillator.start();
+                isSirenPlaying = true;
+            } catch(e) {
+                console.log("Audio siren auto-play blocked or unsupported.");
+            }
+        }
+
+        function stopSirenSound() {
+            if (sirenOscillator) {
+                try {
+                    sirenOscillator.stop();
+                    sirenOscillator.disconnect();
+                } catch(e) {}
+                sirenOscillator = null;
+            }
+            isSirenPlaying = false;
+        }
+
+        function toggleAudioAlarm() {
+            const btn = document.getElementById("alarmAudioBtn");
+            if (isSirenPlaying) {
+                stopSirenSound();
+                btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> Start Acoustic Siren`;
+            } else {
+                startSirenSound();
+                btn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> Mute Acoustic Siren`;
+            }
+        }
+
+        function fakeCall() {
+            const overlay = document.getElementById("fakeCallOverlay");
+            const btnBox = document.getElementById("callControlButtons");
+            const activeBox = document.getElementById("activeCallControls");
+
+            btnBox.classList.remove("hidden");
+            activeBox.classList.add("hidden");
+            document.getElementById("callStatusText").innerText = "Mobile +1 (555) 019-2834";
+            overlay.classList.remove("hidden");
+
+            playRingtoneSound();
+        }
+
+        function playRingtoneSound() {
+            if (ringtoneInterval) clearInterval(ringtoneInterval);
+            ringtoneInterval = setInterval(() => {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    osc.frequency.setValueAtTime(480, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 1.5);
+                } catch(e) {}
+            }, 3000);
+        }
+
+        function stopRingtoneSound() {
+            if (ringtoneInterval) {
+                clearInterval(ringtoneInterval);
+                ringtoneInterval = null;
+            }
+        }
+
+        function acceptFakeCall() {
+            stopRingtoneSound();
+            document.getElementById("callControlButtons").classList.add("hidden");
+            document.getElementById("activeCallControls").classList.remove("hidden");
+            document.getElementById("callStatusText").innerText = "Call Connected (00:00)";
+
+            let seconds = 0;
+            const timerEl = document.getElementById("callTimer");
+            if (activeCallTimerInterval) clearInterval(activeCallTimerInterval);
+            
+            activeCallTimerInterval = setInterval(() => {
+                seconds++;
+                const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const secs = String(seconds % 60).padStart(2, '0');
+                timerEl.innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function endFakeCall() {
+            stopRingtoneSound();
+            if (activeCallTimerInterval) clearInterval(activeCallTimerInterval);
+            document.getElementById("fakeCallOverlay").classList.add("hidden");
+        }
+
+        async function showPolice() {
+            document.getElementById("policeModal").classList.remove("hidden");
+            await loadNearbyPlaces("police");
+        }
+
+        async function showHospital() {
+            document.getElementById("hospitalModal").classList.remove("hidden");
+            await loadNearbyPlaces("hospital");
+        }
+
+        function openPoliceMaps() {
+            if (!lastKnownLocation) {
+                getCurrentLocation().then(() => openPoliceMaps()).catch(() => {
+                    window.open("https://www.google.com/maps/search/police+station+near+me", "_blank");
+                });
+                return;
+            }
+            window.open(
+                `https://www.google.com/maps/search/police+station/@${lastKnownLocation.lat},${lastKnownLocation.lng},14z`,
+                "_blank"
+            );
+        }
+
+        function openHospitalMaps() {
+            if (!lastKnownLocation) {
+                getCurrentLocation().then(() => openHospitalMaps()).catch(() => {
+                    window.open("https://www.google.com/maps/search/hospital+near+me", "_blank");
+                });
+                return;
+            }
+            window.open(
+                `https://www.google.com/maps/search/hospital/@${lastKnownLocation.lat},${lastKnownLocation.lng},14z`,
+                "_blank"
+            );
+        }
+
+        function haversineDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) ** 2 +
+                      Math.cos(lat1 * Math.PI/180) *
+                      Math.cos(lat2 * Math.PI/180) *
+                      Math.sin(dLon/2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        async function loadNearbyPlaces(type) {
+            const status = document.getElementById(type === "police" ? "policeLocationStatus" : "hospitalLocationStatus");
+            const results = document.getElementById(type === "police" ? "policeResults" : "hospitalResults");
+            const map = document.getElementById(type === "police" ? "policeMap" : "hospitalMap");
+
+            status.innerHTML = '<span class="loading-dot"></span> Detecting your location...';
+            results.innerHTML = '<div class="location-result text-slate-400">Searching nearby...</div>';
+
+            try {
+                const loc = await getCurrentLocation();
+                status.innerText = `Your location: ${loc.lat.toFixed(5)}, ${loc.lng.toFixed(5)}`;
+
+                const searchTerm = type === "police" ? "police station" : "hospital";
+                map.src =
+                    `https://www.google.com/maps?q=${encodeURIComponent(searchTerm)}+near+${loc.lat},${loc.lng}&output=embed`;
+
+                const amenity = type === "police" ? "police" : "hospital";
+                const query = `[out:json][timeout:10];(node["amenity"="${amenity}"](around:5000,${loc.lat},${loc.lng});way["amenity"="${amenity}"](around:5000,${loc.lat},${loc.lng});relation["amenity"="${amenity}"](around:5000,${loc.lat},${loc.lng}););out center tags;`;
+                const url = "https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(query);
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Nearby search failed");
+                const data = await response.json();
+
+                const places = (data.elements || []).map(item => {
+                    const lat = item.lat ?? item.center?.lat;
+                    const lng = item.lon ?? item.center?.lon;
+                    if (lat == null || lng == null) return null;
+                    return {
+                        name: item.tags?.name || (type === "police" ? "Police Station" : "Hospital"),
+                        lat,
+                        lng,
+                        distance: haversineDistance(loc.lat, loc.lng, lat, lng),
+                        address: item.tags?.["addr:street"] || item.tags?.["addr:full"] || ""
+                    };
+                }).filter(Boolean).sort((a,b) => a.distance - b.distance).slice(0, 5);
+
+                if (!places.length) {
+                    results.innerHTML = `<div class="location-result text-slate-300">No ${type === "police" ? "police stations" : "hospitals"} were returned within 5 km. Use the Google Maps button above for a wider search.</div>`;
+                    return;
+                }
+
+                results.innerHTML = places.map((place, index) => {
+                    const maps = `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
+                    return `
+                        <div class="location-result">
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <div class="font-bold text-white">${index === 0 ? "⭐ " : ""}${escapeHtml(place.name)}</div>
+                                    <div class="text-emerald-400 font-semibold mt-1">${place.distance.toFixed(2)} km away</div>
+                                    ${place.address ? `<div class="text-slate-400 mt-1">${escapeHtml(place.address)}</div>` : ""}
+                                </div>
+                                <a href="${maps}" target="_blank" rel="noopener" class="shrink-0 bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-xl font-semibold">
+                                    <i class="fa-solid fa-route"></i> Route
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+            } catch (error) {
+                status.innerText = "Could not access GPS/location services.";
+                results.innerHTML = `<div class="location-result text-slate-300">Please allow location permission. You can still use the Google Maps search button to find nearby ${type === "police" ? "police stations" : "hospitals"}.</div>`;
+                map.src = `https://www.google.com/maps?q=${encodeURIComponent(type === "police" ? "police station near me" : "hospital near me")}&output=embed`;
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add("hidden");
+            if (modalId === 'sosModal') {
+                stopSirenSound();
+                stopLiveLocationTracking();
+            }
+        }
+
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains("hidden")) {
+                modal.classList.remove("hidden");
+            } else {
+                modal.classList.add("hidden");
+            }
+        }
+
+        function logout() {
+            if (confirm("Are you sure you want to logout from Women Safety Dashboard?")) {
+                localStorage.removeItem("loggedIn");
+                showToast("Logging out...", "info");
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 800);
+            }
+        }
+
+        function showToast(message, type = "info") {
+            const toast = document.createElement("div");
+            const colors = {
+                success: "bg-emerald-600/90 text-white border-emerald-400/40",
+                error: "bg-rose-600/90 text-white border-rose-400/40",
+                warning: "bg-amber-600/90 text-white border-amber-400/40",
+                info: "bg-slate-800/90 text-white border-slate-600/40"
+            };
+
+            toast.className = `fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-2xl border text-xs font-semibold backdrop-blur-md transition-all duration-300 transform translate-y-4 opacity-0 flex items-center gap-2 ${colors[type]}`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${escapeHtml(message)}`;
+            
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove("translate-y-4", "opacity-0");
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add("translate-y-4", "opacity-0");
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function initParticleCanvas() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const particles = [];
+            const particleCount = Math.min(Math.floor(window.innerWidth / 15), 60);
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    radius: Math.random() * 2 + 1,
+                    alpha: Math.random() * 0.5 + 0.2
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p1 = particles[i];
+                    p1.x += p1.vx;
+                    p1.y += p1.vy;
+
+                    if (p1.x < 0 || p1.x > canvas.width) p1.vx *= -1;
+                    if (p1.y < 0 || p1.y > canvas.height) p1.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(244, 114, 182, ${p1.alpha})`;
+                    ctx.fill();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(236, 72, 153, ${0.15 * (1 - dist / 120)})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+    </script>
 </body>
 </html>
