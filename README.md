@@ -160,6 +160,20 @@ CORS enables frontend and backend connection
 Website provides fast, secure, and real-time emergency support system
 
 -------------------------------------------------
+
+Result :-
+
+<img width="1711" height="857" alt="image" src="https://github.com/user-attachments/assets/ed3af7d5-b7f4-44a9-b8a3-d44ef43236d8" />
+<img width="1892" height="880" alt="image" src="https://github.com/user-attachments/assets/2b3a1dd5-a696-46cb-999e-a1521ff98ed1" />
+<img width="875" height="791" alt="image" src="https://github.com/user-attachments/assets/2a063ed8-037b-42a9-93c7-7a0cd339410e" />
+
+------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 👩‍💻 Author
 
 Jaya Bhunte
